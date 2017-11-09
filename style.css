@@ -1,0 +1,33 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	
+	background: #00151f;
+}
+
+header {
+	padding: 0 !Important;
+}
+
+header h1{
+	position: relative;
+	height: 140px;
+	
+	font-size: 94px;
+}
+
+header div {
+	line-height: 140px;
+	position: relative;
+	display: inline-block;
+	height: 140px;
+	font-family: 'Josefin Sans' !important;
+	margin-top: 0 !Important;
+}
