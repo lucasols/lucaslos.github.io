@@ -1,0 +1,46 @@
+.social-links {
+  li {
+    float: left;
+    margin-right: 26px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    a {
+      position: relative;
+
+      float: left;
+      width: 64px;
+      height: 64px;
+
+      font-size: 0;
+
+      background-color: transparentize($bgcolor, .4);
+      border-radius: 50%;
+      border: solid 2px $light2;
+
+      transition: .2s ease-out;
+
+      &:hover {
+        background-color: $light4;
+        border-color: $light4;
+
+        svg {
+          fill: $bgcolor;
+        }
+      }
+
+      svg {
+        position: absolute;
+
+        @include h-center(36px);
+        @include v-center(36px);
+
+        fill: $light2;
+
+        transition: .2s ease-out;
+      }
+    }
+  }
+}

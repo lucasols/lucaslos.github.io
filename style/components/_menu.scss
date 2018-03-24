@@ -1,0 +1,116 @@
+#menu {
+  position: fixed;
+  top: 11 + 10px;
+  right: 12 + 10px;
+  z-index: 1;
+
+  height: 50px;
+  width: 52px;
+  overflow: hidden;
+
+  background-color: rgba($bgcolor, .8);
+  border-radius: 3px;
+
+  transition: .2s ease-out;
+
+  .nav-toggle {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    z-index: 1;
+
+    height: 50px;
+    width: 52px;
+
+    cursor: pointer;
+
+    // TODO: change on menu expanded
+    .hamburger {
+      position: absolute;
+
+      top: 24px;
+      left: 14px;
+
+      &,
+      &::after,
+      &::before {
+        position: absolute;
+
+        width: 24px;
+        height: 2px;
+        background-color: $light1;
+      }
+
+      &::after {
+        content: '';
+
+        top: 8px;
+      }
+
+      &::before {
+        content: '';
+
+        bottom: 8px;
+      }
+    }
+  }
+
+  // hover state
+
+  &:hover {
+    background-color: $dark1;
+  }
+
+  // active state
+
+  &.active {
+    width: 216px;
+    height: 290px;
+
+    background-color: rgba($dark1, .95);
+  }
+
+  ul {
+    position: relative;
+
+    float: right;
+    width: 216px;
+
+    margin-top: 17px;
+    margin-bottom: 10px;
+
+    a {
+      height: 50px;
+      display: block;
+      padding-left: 36px;
+
+      color: $light2;
+      font-size: 24px;
+      line-height: 50px;
+
+      span {
+        border-bottom: solid 2px transparent;
+        transition: .2s ease-out;
+
+        &.active {
+          border-color: $light1 !important;
+        }
+      }
+
+      &:hover span {
+        border-color: $dark4;
+      }
+
+    }
+  }
+
+  .lang-switcher {
+    position: relative;
+
+    float: right;
+
+    margin-right: 109px;
+    margin-bottom: 34px;
+  }
+}

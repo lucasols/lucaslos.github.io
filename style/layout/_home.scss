@@ -1,0 +1,62 @@
+#home {
+  article {
+    @include h-center(900px);
+    position: relative;
+    top: 50%;
+    height: 300px;
+    text-align: center;
+
+    .logotype {
+      width: 100%;
+      height: 140px;
+      margin-top: -80px;
+      font-family: $josefin;
+      font-weight: 300;
+      font-size: 94px;
+      line-height: 140px;
+      color: #fff;
+      //test
+      // transform: translateZ(-900px);
+    }
+
+    .mark {
+      float: left;
+      height: 140px;
+      width: 90px;
+      margin-right: 27px;
+      background: url('./images/logo.svg');
+    }
+
+    > p {
+      float: left;
+      margin: -4px 0 0 280px;
+      color: $light2;
+      font-size: 20px;
+    }
+
+    ul {
+      display: inline-block;
+      height: 50px;
+      margin-top: 76px;
+      text-align: center;
+
+      li {
+        display: inline-block;
+
+        .button:hover {
+          background-color: $light1;
+        }
+      }
+
+      li:nth-child(2) {
+        margin: 0 20px;
+      }
+    }
+  }
+
+  .lang-switcher {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+  }
+}

@@ -1,0 +1,52 @@
+#about-me article {
+	position: relative;
+	top: 170px;
+
+	@include h-center(626px);
+	font-family: $source;
+
+
+	> * {
+		background-color: rgba($bgcolor, .8);
+	}
+
+	> p {
+		margin-bottom: 40px;
+
+		color: $light3;
+		font-size: 20px;
+		line-height: 1.5;
+
+		span {
+			color: #fff;
+		}
+	}
+
+	.my-skills,
+	.education {
+		float: left;
+		width: 50%;
+	}
+
+	.my-skills {
+		padding-bottom: 14px;
+		padding-right: 10px;
+	}
+
+	.social {
+		float: left;
+		clear: both;
+
+		a {
+			margin-right: 10px;
+		}
+	}
+
+	h2 {
+		margin-bottom: 14px;
+
+		color: #fff;
+		font-size: 20px;
+		font-weight: 600;
+	}
+}

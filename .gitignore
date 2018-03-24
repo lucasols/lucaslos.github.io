@@ -1,0 +1,11 @@
+node_modules
+*.log
+config.json
+package-lock.json
+public/*.js
+public/*.LICENSE
+public/style*
+production
+.cache-loader
+stats.json
+data/**/*

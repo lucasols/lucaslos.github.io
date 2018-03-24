@@ -1,0 +1,27 @@
+#works article {
+  position: absolute;
+  top: 134px;
+  left: 4%;
+  right: 4%;
+  bottom: calc(8% - 6px);
+
+  padding: 6px 4%;
+
+  .projects-wrapper {
+    position: relative;
+
+    height: 100%;
+    width: 100%;
+    overflow-x: visible;
+  }
+
+  > nav {
+    @include v-center(36px * 4 + 8px * 3);
+
+    position: absolute;
+
+    right: 2%;
+
+    width: 16px;
+  }
+}

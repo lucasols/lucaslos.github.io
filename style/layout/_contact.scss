@@ -1,0 +1,59 @@
+.contact-container {
+  @include h-center(720px);
+
+  position: absolute;
+  top: 258px;
+  bottom: 0;
+
+  text-align: center;
+
+  h2 {
+    margin-bottom: 62px;
+
+    color: #fff;
+    font-family: $source;
+    font-size: 62px;
+    font-weight: 300;
+    line-height: .75;
+  }
+
+  .button {
+    display: inline-block;
+    float: none;
+    padding-left: 30px + 24px + 20px;
+
+    svg {
+      @include v-center(24px);
+
+      position: absolute;
+      left: 30px;
+
+      fill: $light2;
+    }
+  }
+
+  .email {
+    margin-right: 40px;
+  }
+
+  ul {
+    display: inline-block;
+
+    clear: both;
+    margin-top: 58px;
+  }
+}
+
+
+.github-project-link {
+  @include h-center(270px);
+
+  position: absolute;
+  bottom: 6%;
+
+  font-size: 14px;
+  color: $light2;
+  text-align: center;
+
+  background-color: rgba($bgcolor, .6);
+}
