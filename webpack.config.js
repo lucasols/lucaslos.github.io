@@ -7,6 +7,8 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const folder = 'docs/Ym13IGRhdGEgdml6dWFsaXphdGlvbg==';
 
 module.exports = {
+  mode: 'production',
+
   entry: [
     './src/index.js',
     './style/main.scss',

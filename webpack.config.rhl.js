@@ -4,6 +4,8 @@ const HappyPack = require('happypack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
+
   entry: [
     path.join(__dirname, 'src/index.js'),
     './style/main.scss',
@@ -16,7 +18,7 @@ module.exports = {
     pathinfo: true,
   },
 
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'inline-source-map',
 
   module: {
     rules: [
@@ -58,23 +60,6 @@ module.exports = {
       ],
     }),
   ],
-
-  devServer: {
-    host: 'localhost',
-    port: 5000,
-    https: true,
-    open: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-id, Content-Length, X-Requested-With',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    },
-
-    historyApiFallback: true,
-
-    hot: true,
-  },
 
   resolve: {
     modules: [

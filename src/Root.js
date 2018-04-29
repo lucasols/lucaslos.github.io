@@ -1,8 +1,8 @@
-import React from 'react'; import PropTypes from 'prop-types'; 
+import React from 'react';
 import { Provider } from 'react-redux';
 import { hot } from 'react-hot-loader';
 
-import App from 'containers/App';
+import App from 'App';
 import store from 'redux/store/configureStore';
 
 const Root = () => (
