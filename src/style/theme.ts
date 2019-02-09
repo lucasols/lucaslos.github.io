@@ -1,13 +1,18 @@
-export const colorPrimary = '#00FFC2';
+import css from "@emotion/css";
 
-export const colorSecondary = '#172357';
-export const colorSecondaryDarker = '#131D49';
-export const colorSecondaryLigher = '#1C2A68';
+/* colors */
+export const colorPrimary = '#00EEFF';
+export const colorSecondary = '#BAF1FF';
+export const colorBg = '#0F053C';
 
-export const colorRed = '#E53558';
-export const colorYellow = '#E5DE35';
+export const gradientBg = css`
+  background: linear-gradient(
+    158deg,
+    ${colorBg} 14%,
+    #0B042B 86%
+  );
+`;
 
 /* fonts */
-export const fontPrimary = 'Open Sans';
-export const fontSecondary = 'Source Sans Pro';
-export const fontDecorative = 'Source Code Pro';
+export const fontPrimary = 'Lato, sans-serif';
+export const fontSecondary = 'Open Sans, sans-serif';
