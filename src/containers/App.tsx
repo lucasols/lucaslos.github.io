@@ -1,8 +1,11 @@
 import React from 'react';
+import Home from 'containers/Home';
+import Background from 'containers/Background';
 
 const App = () => (
   <>
-    <div>Hello Word!</div>
+    <Background />
+    <Home />
   </>
 );
 
