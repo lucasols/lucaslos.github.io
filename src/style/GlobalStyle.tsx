@@ -1,8 +1,10 @@
 import { css, Global } from '@emotion/core';
 import hotkey from 'hotkeys-js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import normalize from 'style/normalize';
 import scrollBar from 'style/scrollBar';
+import { colorPrimary, fontPrimary } from 'style/theme';
+import { useGetSet } from 'utils/customHooks';
 
 const debugLayoutStyle = css`
   *:not(g):not(path) {
@@ -15,36 +17,57 @@ const debugLayoutStyle = css`
   }
 `;
 
+const reset = css`
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    transform: translate3d(0, 0, 0);
+    user-select: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body,
+  #app {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    font-family: ${fontPrimary}, sans-serif;
+    color: ${colorPrimary};
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:visited {
+      color: inherit;
+    }
+  }
+`;
+
 const GlobalStyle = () => {
-  const [debugLayout, setDebugLayout] = useState(false);
+  const [getDebugLayout, setDebugLayout] = useGetSet(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
-      hotkey.unbind('shift+d');
       hotkey('shift+d', () => {
-        setDebugLayout(!debugLayout);
+        setDebugLayout(!getDebugLayout());
       });
     }
-  }, [debugLayout]);
+  }, []);
 
   return (
     <Global
-      styles={css(normalize, scrollBar, debugLayout && debugLayoutStyle, {
-        '*, *::before, *::after': {
-          boxSizing: 'border-box',
-          transform: 'translate3d(0, 0, 0)',
-          userSelect: 'none',
-          margin: 0,
-        },
-        'html, body, #app': {
-          position: 'absolute',
-          height: '100%',
-          width: '100%',
-
-          fontFamily: 'Open Sans, sans-serif',
-          color: '#fff',
-        },
-      })}
+      styles={[
+        normalize,
+        scrollBar,
+        getDebugLayout() && debugLayoutStyle,
+        reset,
+      ]}
     />
   );
 };
