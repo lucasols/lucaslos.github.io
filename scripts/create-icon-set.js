@@ -1,11 +1,11 @@
 /* eslint-disable quote-props */
-/* react icon set creator v1.0.0 */
+/* react icon set creator v1.0.1 */
 
 const fs = require('fs');
 const path = require('path');
 const clipboardy = require('clipboardy');
 const SVGO = require('svgo-sync');
-const currentSet = require('../src/data/icons.json');
+
 
 // TODO: merge sets
 
@@ -13,8 +13,13 @@ const currentSet = require('../src/data/icons.json');
 const inputFolder = '../resources/Navigation Icons/';
 const outputFile = '../src/data/icons.json';
 const input = {
-  'keyboard-arrow-up': `
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+  'arrow-down': `
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.3779 12.3522C4.02011 12.1435 3.56088 12.2643 3.35217 12.6221C3.14346 12.9799 3.26431 13.4391 3.6221 13.6478L4.3779 12.3522ZM16 20L15.6221 20.6478C15.8556 20.7841 16.1444 20.7841 16.3779 20.6478L16 20ZM28.3779 13.6478C28.7357 13.4391 28.8565 12.9799 28.6478 12.6221C28.4391 12.2643 27.9799 12.1435 27.6221 12.3522L28.3779 13.6478ZM3.6221 13.6478L15.6221 20.6478L16.3779 19.3522L4.3779 12.3522L3.6221 13.6478ZM16.3779 20.6478L28.3779 13.6478L27.6221 12.3522L15.6221 19.3522L16.3779 20.6478Z" fill="#BAF1FF"/>
+  </svg>
+
+
+
   `,
 };
 const renames = {
