@@ -24,29 +24,35 @@ export function useOnChange<T>(value: T, callBack: (last: T) => void) {
 }
 
 /**
+ * Returns a throttled value
  *
  * @param value value to be debounced
  * @param limit limit in ms
  */
-export const useThrottle = <T>(value: T, limit: number) => {
+export function useThrottle<T>(value: T, limit: number) {
   const [throttledValue, setThrottledValue] = useState(value);
   const lastRan = useRef(Date.now());
 
-  useEffect(
-    () => {
-      const handler = setTimeout(() => {
-        if (Date.now() - lastRan.current >= limit) {
-          setThrottledValue(value);
-          lastRan.current = Date.now();
-        }
-      }, limit - (Date.now() - lastRan.current));
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (Date.now() - lastRan.current >= limit) {
+        setThrottledValue(value);
+        lastRan.current = Date.now();
+      }
+    }, limit - (Date.now() - lastRan.current));
 
-      return () => {
-        clearTimeout(handler);
-      };
-    },
-    [value, limit]
-  );
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, limit]);
 
   return throttledValue;
-};
+}
+
+export function useGetSet<T>(initialState: T): [() => T, (value: T) => void] {
+  const [value, set] = useState(initialState);
+  const s = useRef(initialState);
+  const get = useCallback(() => s.current, []);
+  s.current = value;
+  return [get, set];
+}
