@@ -5,6 +5,7 @@ import normalize from 'style/normalize';
 import scrollBar from 'style/scrollBar';
 import { colorPrimary, fontPrimary } from 'style/theme';
 import { useGetSet } from 'utils/customHooks';
+import { fillContainer } from 'style/modifiers';
 
 const debugLayoutStyle = css`
   *:not(g):not(path) {
@@ -26,25 +27,32 @@ const reset = css`
     user-select: none;
     margin: 0;
     padding: 0;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  p {
+    user-select: text;
   }
 
   html,
   body,
   #app {
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    ${fillContainer}
 
     font-family: ${fontPrimary}, sans-serif;
     color: ${colorPrimary};
+
+    transform: none;
   }
 
   a {
-    color: inherit;
+    color: #fff;
     text-decoration: none;
 
     &:visited {
-      color: inherit;
+      color: #fff;
     }
   }
 `;

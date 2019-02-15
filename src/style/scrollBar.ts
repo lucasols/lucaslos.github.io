@@ -1,9 +1,10 @@
 import { css } from '@emotion/core';
-import { rgba, tint, lighten } from 'polished';
-import { colorSecondary, colorSecondaryDarker } from 'style/theme';
+import { lighten } from 'polished';
+import { colorBg, colorPrimary } from 'style/theme';
+import { hexToRgb } from 'utils/genericUtils';
 
-const background = colorSecondaryDarker;
-const thumb = lighten(0.16, colorSecondary);
+const background = colorBg;
+const thumb = hexToRgb(lighten(0.16, colorPrimary)).join(',');
 
 export default css`
   ::-webkit-scrollbar {
@@ -16,15 +17,14 @@ export default css`
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: ${rgba(thumb, 0.5)};
+    background-color: rgba(${thumb}, 0.5);
 
     &:hover {
-      background-color: ${rgba(thumb, 0.7)};
+      background-color: rgba(${thumb}, 0.7);
     }
 
     &:active {
-      background-color: ${rgba(thumb, 0.9)};
+      background-color: rgba(${thumb}, 0.9);
     }
   }
 

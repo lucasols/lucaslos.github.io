@@ -1,36 +1,40 @@
 import styled from '@emotion/styled';
 import Icon from 'components/Icon';
 import Logo from 'components/Logo';
-import React from 'react';
+import React, { useMemo, useEffect } from 'react';
+import { animated, useSprings } from 'react-spring';
 import { letterSpacing } from 'style/helpers';
 import { centerContent, centerContentCollum, fillContainer } from 'style/modifiers';
-import { fontSecondary } from 'style/theme';
+import { colorPrimaryRgba, fontSecondary } from 'style/theme';
+import { PosProp } from 'typings/spaceScroll';
+import { getStyles } from 'utils/spaceScroll';
 
 const Container = styled.section`
   ${fillContainer};
   ${centerContentCollum};
 `;
 
-const Menu = styled.nav`
+const TopNav = styled.nav`
   position: absolute;
   top: 44px;
 
   a {
+    display: inline-block;
     text-transform: uppercase;
     font-size: 24px;
     padding: 8px 32px;
-    ${letterSpacing(0.1)}
+    ${letterSpacing(0.1)};
+    color: ${colorPrimaryRgba(0.7)};
 
-    opacity: 0.7;
-    transition: opacity 240ms ease-out;
+    transition: color 240ms ease-out;
 
     &:hover {
-      opacity: 1;
+      color: ${colorPrimaryRgba(1)};
     }
   }
 `;
 
-const Logotype = styled.div`
+const Logotype = styled(animated.div)`
   ${centerContent};
 
   h1 {
@@ -42,7 +46,7 @@ const Logotype = styled.div`
   }
 `;
 
-const Description = styled.h2`
+const Description = styled(animated.h2)`
   font-size: 18px;
   text-transform: uppercase;
   font-weight: 300;
@@ -55,7 +59,7 @@ const Description = styled.h2`
   }
 `;
 
-const Scroll = styled.div`
+const Scroll = styled(animated.div)`
   ${centerContentCollum};
   position: absolute;
   bottom: 32px;
@@ -77,24 +81,37 @@ const Scroll = styled.div`
   }
 `;
 
-const Home = () => {
+const Home = ({ pos }: PosProp) => {
+  const styles = useMemo(() => getStyles('home', 6, pos), []);
 
+  // const [springs, set] = useSprings(6, i => ({ pos: 2 * i }));
+
+  // useEffect(() => {
+  //   function update() {
+  //     set((i: number) => ({ pos: 0 }));
+  //   }
+
+  //   window.addEventListener('scroll', update);
+  // }, []);
 
   return (
     <Container>
-      <Menu>
-        <a href="#about-me">About Me</a>
-        <a href="#projects">Projects</a>
-        <a href="#projects">Contact</a>
-      </Menu>
-      <Logotype>
+      <TopNav>
+        <animated.a style={styles[1]()} href="#about-me">
+          About Me
+        </animated.a>
+        <animated.a style={styles[2]()} href="#projects">Projects</animated.a>
+        <animated.a style={styles[3]()} href="#projects">Contact</animated.a>
+      </TopNav>
+      <Logotype style={styles[4]()}>
         <Logo />
         <h1>LUCAS SANTOS</h1>
       </Logotype>
-      <Description>
-        <strong>UI/UX Designer</strong> and <strong>Front-End Dev</strong> at <strong>Project Mobility</strong>
+      <Description style={styles[5]()}>
+        <strong>UI/UX Designer</strong> and <strong>Front-End Dev</strong> at{' '}
+        <strong>Project Mobility</strong>
       </Description>
-      <Scroll>
+      <Scroll style={styles[6]()}>
         <span>SCROLL</span>
         <Icon name="arrow-down" />
       </Scroll>

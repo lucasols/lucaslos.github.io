@@ -8,6 +8,31 @@ import devtools from './devtools';
 // IDEA: connect function
 // IDEA: create hook for get multiple keys from store at same
 
+type Serializable =
+  | boolean
+  | number
+  | string
+  | null
+  | SerializableArray
+  | SerializableMap;
+
+type SerializableMap = {
+  [key: string]: Serializable;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface SerializableArray extends Array<Serializable> {}
+
+type anyObject<T = any> = {
+  [key: string]: T;
+}
+
+type genericFunction = {
+  (...params: any): any;
+}
+
+type State = anyObject<Serializable>;
+
 type Subscriber = {
   (prev: anyObject, current: anyObject, action?: string | anyObject): void;
 };
