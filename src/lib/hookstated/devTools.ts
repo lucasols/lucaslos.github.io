@@ -1,3 +1,5 @@
+import { State } from 'lib/hookstated';
+
 let id = 0;
 
 export default (storeName: string, initialState: State, setState: (state: State) => void) => {

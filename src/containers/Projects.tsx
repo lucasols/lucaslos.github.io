@@ -3,11 +3,10 @@ import PageHeader from 'components/PageHeader';
 import Project from 'components/Project';
 import Steeper from 'components/Steeper';
 import projects from 'config/projects';
-import React, { useMemo } from 'react';
-import { centerContent, fillContainer } from 'style/modifiers';
-import { PosProp } from 'typings/spaceScroll';
-import { getStyles } from 'utils/spaceScroll';
+import React, { CSSProperties } from 'react';
 import { animated } from 'react-spring';
+import { centerContent, fillContainer } from 'style/modifiers';
+import { PosProp, useGetStyles } from 'utils/spaceScroll';
 
 const Container = styled.section`
   ${fillContainer};
@@ -34,11 +33,15 @@ const ProjectsContainer = styled(animated.div)`
   right: 40px;
 `;
 
-const Projects = ({ pos }: PosProp) => {
-  const styles = useMemo(() => getStyles('projects', 3, pos), []);
+const disableInteractivity: CSSProperties = {
+  pointerEvents: 'none',
+};
+
+const Projects = ({ springProps, active }: PosProp) => {
+  const styles = useGetStyles('projects', 2, springProps);
 
   return (
-    <Container>
+    <Container style={active ? undefined : disableInteractivity}>
       <PageHeader section="Projects" style={styles[1]()} />
       <Content>
         <ProjectsContainer style={styles[2]()}>
@@ -53,7 +56,7 @@ const Projects = ({ pos }: PosProp) => {
           ]}
           activeId={0}
           onClickItem={id => alert(id)}
-          style={styles[3]()}
+          style={styles[2]()}
         />
       </Content>
     </Container>

@@ -49,10 +49,10 @@ export function useThrottle<T>(value: T, limit: number) {
   return throttledValue;
 }
 
-export function useGetSet<T>(initialState: T): [() => T, (value: T) => void] {
+export function useGetSet<T>(initialState: T): [() => T, (value: T) => void, T] {
   const [value, set] = useState(initialState);
   const s = useRef(initialState);
   const get = useCallback(() => s.current, []);
   s.current = value;
-  return [get, set];
+  return [get, set, value];
 }

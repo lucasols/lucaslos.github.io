@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
 import Icon from 'components/Icon';
 import Logo from 'components/Logo';
-import React, { useMemo, useEffect } from 'react';
-import { animated, useSprings } from 'react-spring';
+import React, { CSSProperties } from 'react';
+import { animated } from 'react-spring';
 import { letterSpacing } from 'style/helpers';
 import { centerContent, centerContentCollum, fillContainer } from 'style/modifiers';
 import { colorPrimaryRgba, fontSecondary } from 'style/theme';
-import { PosProp } from 'typings/spaceScroll';
-import { getStyles } from 'utils/spaceScroll';
+import { PropWithGoToSection, useGetStyles } from 'utils/spaceScroll';
 
 const Container = styled.section`
   ${fillContainer};
@@ -81,27 +80,39 @@ const Scroll = styled(animated.div)`
   }
 `;
 
-const Home = ({ pos }: PosProp) => {
-  const styles = useMemo(() => getStyles('home', 6, pos), []);
+const disableInteractivity: CSSProperties = {
+  pointerEvents: 'none',
+};
 
-  // const [springs, set] = useSprings(6, i => ({ pos: 2 * i }));
-
-  // useEffect(() => {
-  //   function update() {
-  //     set((i: number) => ({ pos: 0 }));
-  //   }
-
-  //   window.addEventListener('scroll', update);
-  // }, []);
+// TODO: put an element over scrollbar to avoid its drag
+// TODO: add one transition for each letter/word
+const Home = ({ springProps, goToSection, active }: PropWithGoToSection) => {
+  const styles = useGetStyles('home', 6, springProps);
 
   return (
-    <Container>
+    <Container style={active ? undefined : disableInteractivity}>
       <TopNav>
-        <animated.a style={styles[1]()} href="#about-me">
+        <animated.a
+          style={styles[1]()}
+          onClick={() => goToSection('aboutMe')}
+          href="#about-me"
+        >
           About Me
         </animated.a>
-        <animated.a style={styles[2]()} href="#projects">Projects</animated.a>
-        <animated.a style={styles[3]()} href="#projects">Contact</animated.a>
+        <animated.a
+          style={styles[2]()}
+          onClick={() => goToSection('projects')}
+          href="#projects"
+        >
+          Projects
+        </animated.a>
+        <animated.a
+          style={styles[3]()}
+          onClick={() => goToSection('contact')}
+          href="#projects"
+        >
+          Contact
+        </animated.a>
       </TopNav>
       <Logotype style={styles[4]()}>
         <Logo />
@@ -111,7 +122,7 @@ const Home = ({ pos }: PosProp) => {
         <strong>UI/UX Designer</strong> and <strong>Front-End Dev</strong> at{' '}
         <strong>Project Mobility</strong>
       </Description>
-      <Scroll style={styles[6]()}>
+      <Scroll style={styles[6]()} onClick={() => goToSection('aboutMe')}>
         <span>SCROLL</span>
         <Icon name="arrow-down" />
       </Scroll>

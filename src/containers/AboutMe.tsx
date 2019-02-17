@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
 import Link from 'components/Link';
 import PageHeader from 'components/PageHeader';
-import React, { useMemo } from 'react';
+import React, { CSSProperties } from 'react';
 import { animated } from 'react-spring';
 import { centerContent, fillContainer } from 'style/modifiers';
 import { colorPrimary, colorPrimaryRgba, colorSecondary, fontSecondary } from 'style/theme';
-import { PosProp } from 'typings/spaceScroll';
-import { getStyles } from 'utils/spaceScroll';
+import { PosProp, useGetStyles } from 'utils/spaceScroll';
 
 const Container = styled.section`
   ${fillContainer};
@@ -99,11 +98,15 @@ const Skill = styled.div`
   }
 `;
 
-const AboutMe = ({ pos }: PosProp) => {
-  const styles = useMemo(() => getStyles('aboutMe', 6, pos), []);
+const disableInteractivity: CSSProperties = {
+  pointerEvents: 'none',
+};
+
+const AboutMe = ({ springProps, active }: PosProp) => {
+  const styles = useGetStyles('aboutMe', 6, springProps);
 
   return (
-    <Container>
+    <Container style={active ? undefined : disableInteractivity}>
       <PageHeader section="About Me" style={styles[1]()} />
       <Content>
         <Bio style={styles[2]()}>

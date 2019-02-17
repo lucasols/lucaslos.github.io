@@ -3,13 +3,12 @@ import styled from '@emotion/styled';
 import Link from 'components/Link';
 import PageHeader from 'components/PageHeader';
 import Planet from 'components/Planet';
-import React, { useMemo } from 'react';
+import React, { CSSProperties } from 'react';
 import { animated } from 'react-spring';
 import { letterSpacing } from 'style/helpers';
 import { centerContent, fillContainer } from 'style/modifiers';
 import { colorPrimaryRgba, fontSecondary } from 'style/theme';
-import { PosProp } from 'typings/spaceScroll';
-import { getStyles } from 'utils/spaceScroll';
+import { PosProp, useGetStyles } from 'utils/spaceScroll';
 
 const Container = styled.section`
   ${fillContainer};
@@ -75,30 +74,34 @@ const socialIcon = css`
   }
 `;
 
-const Contact = ({ pos }: PosProp) => {
-  const styles = useMemo(() => getStyles('contact', 7, pos), []);
+const disableInteractivity: CSSProperties = {
+  pointerEvents: 'none',
+};
+
+const Contact = ({ springProps, active }: PosProp) => {
+  const styles = useGetStyles('contact', 9, springProps);
 
   return (
-    <Container>
+    <Container style={active ? undefined : disableInteractivity}>
       <PageHeader section="Contact" style={styles[1]()} />
-      <PlanetWrapper style={styles[1]()}>
+      <PlanetWrapper style={styles[2]()}>
         <Planet />
       </PlanetWrapper>
       <MainContent>
-        <animated.h1 style={styles[1]()}>Got a project?</animated.h1>
-        <animated.h2 style={styles[2]()}>Let&apos;s talk</animated.h2>
+        <animated.h1 style={styles[3]()}>Got a project?</animated.h1>
+        <animated.h2 style={styles[4]()}>Let&apos;s talk</animated.h2>
         <Link
           icon="email"
           href="mailto:hello@lucassantos.net"
           label="hello@lucassantos.net"
           style={emailButton}
-          springStyle={styles[3]()}
+          springStyle={styles[5]()}
         />
         <SocialButtonsWrapper>
-          <Link icon="linkedin" style={socialIcon} springStyle={styles[4]()} />
-          <Link icon="behance" style={socialIcon} springStyle={styles[5]()} />
-          <Link icon="dribbble" style={socialIcon} springStyle={styles[6]()} />
-          <Link icon="github" style={socialIcon} springStyle={styles[7]()} />
+          <Link icon="linkedin" style={socialIcon} springStyle={styles[6]()} />
+          <Link icon="behance" style={socialIcon} springStyle={styles[7]()} />
+          <Link icon="dribbble" style={socialIcon} springStyle={styles[8]()} />
+          <Link icon="github" style={socialIcon} springStyle={styles[9]()} />
         </SocialButtonsWrapper>
       </MainContent>
     </Container>

@@ -31,7 +31,7 @@ type genericFunction = {
   (...params: any): any;
 }
 
-type State = anyObject<Serializable>;
+export type State = anyObject<Serializable>;
 
 type Subscriber = {
   (prev: anyObject, current: anyObject, action?: string | anyObject): void;
