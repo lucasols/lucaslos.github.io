@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as PIXI from 'pixi.js';
 import store from 'redux/store/configureStore';
 import * as actions from 'redux/actions/index';

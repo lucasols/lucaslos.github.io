@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import webpack from 'webpack';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+const config: webpack.Configuration = {
   mode: 'development',
 
   devtool: 'cheap-module-source-map',
@@ -51,9 +51,16 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
     }),
+    new webpack.DefinePlugin({
+      __DEV__: true,
+      __PROD__: false,
+    }),
   ],
 
   resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
     extensions: ['.ts', '.tsx', '.js', '.json'],
     modules: [
       path.join(__dirname, 'src'),
@@ -61,3 +68,5 @@ module.exports = {
     ],
   },
 };
+
+export default config;

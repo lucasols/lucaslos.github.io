@@ -7,7 +7,8 @@ import Projects from 'containers/Projects';
 import TopButtons from 'containers/TopButtons';
 import React from 'react';
 import { animated } from 'react-spring';
-import { config, scrollHeight, useSpaceScroll } from 'utils/spaceScroll';
+import { scrollHeight, useSpaceScroll } from 'utils/spaceScroll';
+import * as spaceScroll from 'config/spaceScroll'; // REVIEW: all * as imports
 
 const ScrollHandler = styled.div`
   position: absolute;
@@ -21,7 +22,7 @@ const MainContent = styled.div`
   left: 0;
   height: 100%;
   width: 100%;
-  perspective: ${config.perspective}px;
+  perspective: ${spaceScroll.perspective}px;
 
   * {
     transform-style: preserve-3d;
@@ -30,15 +31,16 @@ const MainContent = styled.div`
 
 const App = () => {
   const {
-    scrollPos,
+    relativePos,
     transitionPos,
     goToSection,
     inTransition,
     activeSection,
+    scrollPos,
   } = useSpaceScroll();
 
   const springProps = {
-    pos: scrollPos,
+    pos: relativePos,
     transitionPos,
     inTransition,
   };
@@ -48,7 +50,7 @@ const App = () => {
       <ScrollHandler />
       <MainContent>
         <Background />
-        <div
+        {__DEV__ && <div
           css={{
             position: 'absolute',
             top: 0,
@@ -56,12 +58,14 @@ const App = () => {
             color: '#fff',
           }}
         >
-          Pos: <animated.span>{scrollPos}</animated.span>
+          Pos: <animated.span>{relativePos}</animated.span>
           <br />
           TransitionPos: <animated.span>{transitionPos}</animated.span>
           <br />
           Active: <span>{activeSection}</span>
-        </div>
+          <br />
+          ScrollPos: <animated.span>{scrollPos}</animated.span>
+        </div>}
         <Contact springProps={springProps} active={activeSection === 'contact'} />
         <Projects springProps={springProps} active={activeSection === 'projects'} />
         <AboutMe springProps={springProps} active={activeSection === 'aboutMe'} />

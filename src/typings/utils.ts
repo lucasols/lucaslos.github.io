@@ -1,4 +1,4 @@
-export type anyObject<T = any> = {
+export type obj<T = any> = {
   [key: string]: T;
 }
 

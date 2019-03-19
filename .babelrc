@@ -3,28 +3,28 @@
     "development": {
       "presets": [
         "@babel/typescript",
-        "@babel/env",
         ["@babel/preset-react", { "development": true }],
         "@emotion/babel-preset-css-prop"
       ],
       "plugins": [
-        ["emotion", { "sourceMap": true }],
         "react-hot-loader/babel",
         "@babel/plugin-proposal-class-properties",
-        "@babel/plugin-proposal-object-rest-spread",
+        // "@babel/plugin-proposal-object-rest-spread",
+        ["emotion", { "sourceMap": true }],
       ]
     },
     "production": {
   	  "presets": [
         "@babel/typescript",
-        "@babel/env",
+        "@babel/env", // TODO: check the best config
   	    "@babel/preset-react",
-        "@emotion/babel-preset-css-prop"
+        "@emotion/babel-preset-css-prop" // test https://www.npmjs.com/package/babel-plugin-optimize-react
       ],
       "plugins": [
-        "emotion",
         "@babel/plugin-proposal-class-properties",
         "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-react-constant-elements",
+        "emotion",
       ]
     }
   }

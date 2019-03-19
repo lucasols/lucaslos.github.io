@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { letterSpacing } from 'style/helpers';
 import { OpaqueInterpolation, animated } from 'react-spring';
-import { anyObject } from 'typings/utils';
+import { obj } from 'typings/utils';
 
 type Props = {
   section: string;
-  style: anyObject<OpaqueInterpolation<string | number>>;
+  style: obj<OpaqueInterpolation<string | number>>;
 };
 
 const Container = styled(animated.h1)`

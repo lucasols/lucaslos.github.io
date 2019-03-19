@@ -1,13 +1,14 @@
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 import Logo from 'components/Logo';
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import * as spaceScroll from 'config/spaceScroll';
+import { throttle } from 'lodash-es';
+import React, { useEffect } from 'react';
 import { circle } from 'style/helpers';
 import { centerContent } from 'style/modifiers';
 import { colorBgRgba, colorPrimary } from 'style/theme';
-import { SectionId, config } from 'utils/spaceScroll';
 import { useGetSet } from 'utils/customHooks';
-import { throttle } from 'lodash-es';
+import { SectionId } from 'utils/spaceScroll';
 
 type Props = {
   goToSection: (section: SectionId) => void;
@@ -47,7 +48,7 @@ const MenuButton = styled.button`
 `;
 
 function isAboveThreshold() {
-  const { transitionScrolls, whellDelta, sections: { home: { rest } } } = config;
+  const { transitionScrolls, whellDelta, sections: { home: { rest } } } = spaceScroll;
   const threshold = (transitionScrolls * whellDelta) + (rest * whellDelta) - whellDelta;
   return window.scrollY >= threshold;
 }
@@ -67,6 +68,8 @@ const TopButtons = ({ goToSection }: Props) => {
     }, 100);
 
     window.addEventListener('scroll', onScroll);
+
+    // return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (

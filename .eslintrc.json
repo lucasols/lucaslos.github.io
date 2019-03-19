@@ -14,7 +14,9 @@
   "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "globals": {
     "mapboxgl": true,
-    "firebase": true
+    "firebase": true,
+    "__DEV__": true,
+    "__PROD__": true
   },
   "rules": {
     "implicit-arrow-linebreak": 0,
@@ -110,12 +112,14 @@
     ],
     "no-trailing-spaces": 0,
     "eol-last": 0,
+
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
     "import/first": 0,
     "import/prefer-default-export": 0,
     "import/order": 0,
+
     "react/sort-comp": [
       "error",
       {
@@ -150,10 +154,14 @@
     ],
     "react/destructuring-assignment": 0,
     "react/jsx-closing-tag-location": 0,
+
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/label-has-for": 0,
     "jsx-a11y/click-events-have-key-events": 0,
+
     "react-hooks/rules-of-hooks": "error",
+    // "react-hooks/exhaustive-deps": "warn",
+
     "@typescript-eslint/indent": 0,
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/explicit-function-return-type": 0,

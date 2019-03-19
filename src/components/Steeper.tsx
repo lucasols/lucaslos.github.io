@@ -4,7 +4,7 @@ import React from 'react';
 import { circle, rectSize } from 'style/helpers';
 import { centerContent, centerContentCollum, hide, show } from 'style/modifiers';
 import { colorBg, colorBgRgba, colorPrimary, colorPrimaryRgba, colorSecondaryRgba, fontSecondary } from 'style/theme';
-import { anyObject } from 'typings/utils';
+import { obj } from 'typings/utils';
 import { OpaqueInterpolation, animated } from 'react-spring';
 
 type Id = string | number;
@@ -16,7 +16,7 @@ type Props = {
   }[];
   activeId: Id;
   onClickItem: (id: Id) => any;
-  style: anyObject<OpaqueInterpolation<string | number>>;
+  style: obj<OpaqueInterpolation<string | number>>;
 };
 
 const Container = styled(animated.div)`

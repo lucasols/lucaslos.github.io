@@ -5,7 +5,7 @@ import { letterSpacing } from 'style/helpers';
 import { centerContent } from 'style/modifiers';
 import { colorBgRgba, colorSecondaryRgba } from 'style/theme';
 import { SerializedStyles } from '@emotion/css';
-import { anyObject } from 'typings/utils';
+import { obj } from 'typings/utils';
 import { OpaqueInterpolation, animated } from 'react-spring';
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
   openInNewTab?: boolean;
   style?: SerializedStyles;
   iconSize?: number;
-  springStyle?: anyObject<OpaqueInterpolation<string | number>>;
+  springStyle?: obj<OpaqueInterpolation<string | number>>;
 };
 
 const Container = styled(animated.a)`

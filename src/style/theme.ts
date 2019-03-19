@@ -1,5 +1,5 @@
 import css from "@emotion/css";
-import { hexToRgb } from "utils/genericUtils";
+import { hexToRgb } from "utils/hexToRgb";
 
 /* colors hex */
 export const colorPrimary = '#00EEFF';

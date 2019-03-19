@@ -1,15 +1,14 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const workboxPlugin = require('workbox-webpack-plugin');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+import path from 'path';
+import workboxPlugin from 'workbox-webpack-plugin';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
+// TODO: add typescript full checking
 const folder = 'docs/';
 
-module.exports = {
+const config: webpack.Configuration = {
   mode: 'production',
 
   entry: [
@@ -52,6 +51,7 @@ module.exports = {
             ecma: 8,
           },
           compress: {
+            passes: 3,
             ecma: 5,
             warnings: false,
             // Disabled because of an issue with Uglify breaking seemingly valid code:
@@ -171,5 +171,11 @@ module.exports = {
         },
       ],
     }),
+    new webpack.DefinePlugin({
+      __DEV__: false,
+      __PROD__: true,
+    }),
   ],
 };
+
+export default config;
