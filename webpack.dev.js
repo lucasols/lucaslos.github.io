@@ -1,9 +1,9 @@
-import path from 'path';
-import webpack from 'webpack';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+const path = require('path');
+const webpack = require('webpack');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const config: webpack.Configuration = {
+module.exports = {
   mode: 'development',
 
   devtool: 'cheap-module-source-map',
@@ -68,5 +68,3 @@ const config: webpack.Configuration = {
     ],
   },
 };
-
-export default config;

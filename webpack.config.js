@@ -1,14 +1,13 @@
-import path from 'path';
-import workboxPlugin from 'workbox-webpack-plugin';
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
+const path = require('path');
+const workboxPlugin = require('workbox-webpack-plugin');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
-// TODO: add typescript full checking
 const folder = 'docs/';
 
-const config: webpack.Configuration = {
+module.exports = {
   mode: 'production',
 
   entry: [
@@ -177,5 +176,3 @@ const config: webpack.Configuration = {
     }),
   ],
 };
-
-export default config;
