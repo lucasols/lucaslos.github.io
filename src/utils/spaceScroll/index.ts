@@ -3,9 +3,10 @@ import { throttle } from 'lodash-es';
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { OpaqueInterpolation, useSpring } from 'react-spring';
 import { useGetSet } from 'utils/customHooks';
-import { __log, __stopRecord, __recordValuesOverTime } from 'utils/debugUtils';
-import { debug } from 'util';
-import { lerp } from 'utils/interpolation';
+import { interpolate } from 'utils/interpolation';
+import { __watchValue } from 'utils/debugUtils';
+
+// TODO: refactor position variable names
 
 /* types */
 
@@ -107,6 +108,8 @@ let wireframeScrollPos = 0;
 let wireframeScrollPosBefore = 0;
 let wireframeScrollPosAdjust = 0;
 
+let relativePosValue = 0.5;
+
 /* functions */
 
 export function getStyle(
@@ -124,7 +127,8 @@ export function getStyle(
 
   let sectionStart = 0;
 
-  if (__inTransition) { // REVIEW: mantain __in... or no?
+  if (__inTransition) {
+    // REVIEW: mantain __in... or no?
     if (section === sectionsTransition.zero) {
       sectionStart = 0;
     } else if (section === sectionsTransition.one) {
@@ -184,7 +188,7 @@ function getStyles(
     );
 }
 
-function getSpringPos(scrollPos: number) {
+function getRelPosByScrollPos(scrollPos: number) {
   let pos =
     scrollPos / (spaceScroll.transitionScrolls * spaceScroll.whellDelta * 2)
     + 0.5;
@@ -240,7 +244,7 @@ function getCurrentSectionByScroll(scroll: number) {
   throw new Error('scroll out of range');
 }
 
-function getSectionScrollPos(sectionId: SectionId) {
+function getSectionScrollPosById(sectionId: SectionId) {
   return sectionsScrollPosRanges[spaceScroll.sections[sectionId].order].center;
 }
 
@@ -249,7 +253,11 @@ export function useGetStyles(
   total: number,
   springProps: PosProp['springProps']
 ) {
-  return useMemo(() => getStyles(section, total, springProps), [section, springProps, total]);
+  return useMemo(() => getStyles(section, total, springProps), [
+    section,
+    springProps,
+    total,
+  ]);
 }
 
 function lockScroll(e: MouseEvent) {
@@ -269,14 +277,21 @@ function enableScroll() {
 // REVIEW: Isn't this function too big?
 export function useSpaceScroll() {
   const __isInTransition = useRef(inTransitionReset);
-  const [getActiveSection, setActiveSection, activeSection] = useGetSet(getCurrentSectionByScroll(window.scrollY));
-
-  const [{ relativePos }, setRelativePosSpring] = useSpring<{ relativePos: number }>(
-    () => ({
-      relativePos: 0.5,
-      config: { precision: 0.001, friction: 50 },
-    })
+  const [getActiveSection, setActiveSection, activeSection] = useGetSet(
+    getCurrentSectionByScroll(window.scrollY)
   );
+
+  const [{ relativePos }, setRelativePosSpring] = useSpring<{
+    relativePos: number;
+  }>(() => ({
+    relativePos: 0.5,
+    config: { precision: 0.001, friction: 50 },
+    onFrame: ({ relativePos: pos }: { relativePos: number }) => {
+      if (!__isInTransition.current.active) {
+        relativePosValue = pos;
+      }
+    },
+  }));
 
   const [transitionProps, setTransitionProps] = useState(
     transitionInitialProps
@@ -295,9 +310,14 @@ export function useSpaceScroll() {
         setTransitionProps(transitionInitialProps);
       }
     },
-    onFrame: ({ transitionRelativePos: pos }: { transitionRelativePos: number }) => {
+    onFrame: ({
+      transitionRelativePos: pos,
+    }: {
+      transitionRelativePos: number;
+    }) => {
       if (__isInTransition.current.active) {
         sectionsTransition.relPos = pos;
+        relativePosValue = pos;
       }
     },
   });
@@ -320,11 +340,11 @@ export function useSpaceScroll() {
   }
 
   function setScrollPos(target: SectionId) {
-    const targetScroll = getSectionScrollPos(target);
+    const targetScroll = getSectionScrollPosById(target);
     updateActiveSection(targetScroll);
     window.scrollTo(0, targetScroll);
     setRelativePosSpring({
-      relativePos: getSpringPos(targetScroll),
+      relativePos: getRelPosByScrollPos(targetScroll),
       immediate: true,
     });
     setScrollPosSpring({
@@ -338,7 +358,7 @@ export function useSpaceScroll() {
   useEffect(() => {
     setActiveSection(getCurrentSectionByScroll(window.scrollY));
     setRelativePosSpring({
-      relativePos: getSpringPos(window.scrollY),
+      relativePos: getRelPosByScrollPos(window.scrollY),
       immediate: true,
     });
 
@@ -347,7 +367,7 @@ export function useSpaceScroll() {
         updateActiveSection(window.scrollY);
 
         setRelativePosSpring({
-          relativePos: getSpringPos(window.scrollY),
+          relativePos: getRelPosByScrollPos(window.scrollY),
           immediate: false,
         });
       }
@@ -380,11 +400,15 @@ export function useSpaceScroll() {
 
     wireframeScrollPosBefore = scrollPos.getValue() + wireframeScrollPosAdjust;
 
-    const wireframeScrollPosAfter = wireframeScrollPos + wireframeScrollPosAdjust + ((toRelPos - fromRelPos) * sectionLenght);
+    const wireframeScrollPosAfter =
+      wireframeScrollPos
+      + wireframeScrollPosAdjust
+      + (toRelPos - fromRelPos) * sectionLenght;
     const scrollPosAfter = setScrollPos(target);
     wireframeScrollPosAdjust = wireframeScrollPosAfter - scrollPosAfter;
 
-    __isInTransition.current = { // REVIEW: mantain __in... or no?
+    __isInTransition.current = {
+      // REVIEW: mantain __in... or no?
       active: true,
       to: target,
     };
@@ -410,21 +434,24 @@ export function getWireframePos() {
   if (sectionsTransition.active) {
     const { fromRelPos, toRelPos, relPos } = sectionsTransition;
 
-    const transitionDelta = lerp(relPos, [fromRelPos, toRelPos], [0, toRelPos - fromRelPos]);
+    const transitionDelta = interpolate(
+      relPos,
+      [fromRelPos, toRelPos],
+      [0, toRelPos - fromRelPos]
+    );
     const scrollDelta = transitionDelta * sectionLenght;
 
-    // __recordValuesOverTime('wireframePos', { relPos, returnVal: wireframeScrollPosBefore + scrollDelta, scrollDelta, transitionDelta }, 300);
-
+    // __watchValue('wireframePos', wireframeScrollPosBefore + scrollDelta);
     return wireframeScrollPosBefore + scrollDelta;
   }
 
-  // __stopRecord('wireframePos');
-  // __log('adjust', {
-  //   // wireframeScrollPosAfter,
-  //   adjust: wireframeScrollPosAdjust,
-  //   finalPos: wireframeScrollPos + wireframeScrollPosAdjust,
-  //   wireframeScrollPos,
-  // }, wireframeScrollPosAdjust);
+  // __watchValue('wireframePos', wireframeScrollPos + wireframeScrollPosAdjust);
+  // __watchValue('adjust', wireframeScrollPosAdjust);
+  // __watchValue('wireframeScrollPos', wireframeScrollPos);
 
   return wireframeScrollPos + wireframeScrollPosAdjust;
+}
+
+export function getRelativePos() {
+  return relativePosValue;
 }

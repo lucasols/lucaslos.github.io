@@ -1,5 +1,6 @@
-import { obj } from 'typings/utils';
-import { throttle } from 'lodash-es';
+import { obj, genericFunction } from 'typings/utils';
+import { throttle, round } from 'lodash-es';
+import { watch } from 'fs';
 
 type CheckFunction = (value?: any) => boolean;
 type Id = number | string;
@@ -16,6 +17,11 @@ const throttleLogs: obj<{
   log: (value: any) => void;
   lastDep: any;
 }> = {};
+const watchValues: obj<{
+  value: string | number | (() => string | number);
+  roundPrecision: number;
+}> = {};
+let watchViewIsInitialized = false;
 
 export function __stopRecord(id: Id) {
   if (__DEV__) {
@@ -76,20 +82,27 @@ export function __recordValuesOverTime(
 }
 
 function log(label: Id, value: any) {
-  if (__DEV__) {
-    if (typeof value === 'number' || typeof value === 'string') {
-      console.warn(`${label}: ${value}`);
-    } else {
-      console.warn(value);
-    }
+  if (typeof value === 'number' || typeof value === 'string') {
+    console.warn(`${label}: ${value}`);
+  } else {
+    console.warn(value);
   }
 }
 
-export function __log(id: Id, value: any, dependency = value, diffOnly = true, throttleLimit = 300) {
+export function __log(
+  id: Id,
+  value: any,
+  dependency = value,
+  diffOnly = true,
+  throttleLimit = 300
+) {
   if (__DEV__) {
     if (throttleLogs[id]) {
       if (diffOnly) {
-        if (JSON.stringify(throttleLogs[id].lastDep) !== JSON.stringify(dependency)) {
+        if (
+          JSON.stringify(throttleLogs[id].lastDep)
+          !== JSON.stringify(dependency)
+        ) {
           throttleLogs[id].log(value);
           throttleLogs[id].lastDep = dependency;
         }
@@ -104,6 +117,94 @@ export function __log(id: Id, value: any, dependency = value, diffOnly = true, t
         }, throttleLimit),
         lastDep: dependency,
       };
+    }
+  }
+}
+
+function watchValuesViewTicker() {
+  let watchView = document.getElementById('debug-watch-view');
+
+  if (!watchView) {
+    const style = document.createElement('style');
+    const css = `
+      #debug-watch-view {
+        position: fixed;
+        top: 100px;
+        bottom: 8px;
+        max-width: 200px;
+        height: min-content;
+        max-height: 400px;
+        z-index: 100;
+        padding: 8px;
+        border-radius: 4px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.4);
+        overflow-y: auto;
+      }
+
+      #debug-watch-view.hide {
+        height: 4px;
+        width: 4px;
+        overflow: hidden;
+      }
+    `;
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+
+    watchView = document.createElement('div');
+    watchView.id = 'debug-watch-view';
+    document.body.appendChild(watchView);
+    watchView.addEventListener('click', () => watchView!.classList.toggle('hide'));
+
+    watchViewIsInitialized = true;
+  }
+
+  const values = Object.entries(watchValues);
+
+  const content = values
+    .map(([id, { value, roundPrecision }]) => {
+      let showValue = value;
+
+      if (typeof value === 'function') {
+        const returnedValue = value();
+
+        showValue =
+          typeof returnedValue === 'number'
+            ? round(returnedValue, roundPrecision)
+            : returnedValue;
+      }
+
+      return `${id}: ${showValue}`;
+    })
+    .join('<br>');
+
+  if (content !== watchView.innerHTML) {
+    watchView.innerHTML = content;
+  }
+
+  setTimeout(watchValuesViewTicker, 100);
+}
+
+export function __watchValue(
+  id: Id,
+  value: string | number | (() => string | number),
+  roundPrecision = 3
+) {
+  if (__DEV__) {
+    if (
+      watchValues[id] &&
+      (watchValues[id].value === value)
+    ) return;
+
+    if (!watchViewIsInitialized) watchValuesViewTicker();
+
+    if (typeof value === 'number') {
+      watchValues[id] = {
+        value: round(value, roundPrecision),
+        roundPrecision,
+      };
+    } else {
+      watchValues[id] = { value, roundPrecision };
     }
   }
 }

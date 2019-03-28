@@ -15,5 +15,8 @@ export const perspective = 600;
 export const maxZDelta = 240;
 export const interactionThreshold = 10;
 
+export const wireframePerspective = 2000;
 export const wireframeCycleLength = 10 * whellDelta;
-export const wireFrameMargin = 10;
+export const wireframeMargin = 10;
+export const numOfWireframes = 5;
+export const wireframesZGap = 100;

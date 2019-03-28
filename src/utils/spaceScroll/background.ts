@@ -1,8 +1,16 @@
+import {
+  numOfWireframes,
+  perspective as elementsPerspective,
+  wireframeCycleLength,
+  wireframesZGap,
+  wireframeMargin,
+  wireframePerspective,
+} from 'config/spaceScroll';
 import * as PIXI from 'pixi.js';
 import { colorPrimary } from 'style/theme';
-import { perspective as elementsPerspective, wireFrameMargin, wireframeCycleLength } from 'config/spaceScroll';
-import { cyclicLerp, lerp } from 'utils/interpolation';
-import { getWireframePos } from 'utils/spaceScroll';
+import { __watchValue } from 'utils/debugUtils';
+import { cyclicLerp, interpolate } from 'utils/interpolation';
+import { getRelativePos, getWireframePos } from 'utils/spaceScroll';
 
 export const app = new PIXI.Application({
   autoStart: false,
@@ -12,9 +20,25 @@ export const app = new PIXI.Application({
   resizeTo: window,
   antialias: true,
 });
-let starLayers = [];
+// Test canvas performance
+
+// eslint-disable-next-line prefer-const
+let starLayers: PIXI.ParticleContainer[] = [];
 let wireframes: PIXI.Graphics[] = [];
 let lastWireframePos: null | number = null;
+let lastRelPos: null | number = null;
+
+const starTextureSize = 32;
+const starLayerSizeMultiplier = 2;
+const starShape = new PIXI.Graphics();
+starShape.beginFill(0xffffff);
+starShape.drawCircle(starTextureSize, starTextureSize, starTextureSize);
+starShape.endFill();
+const starTexture = app.renderer.generateTexture(
+  starShape,
+  PIXI.SCALE_MODES.LINEAR,
+  1
+);
 
 export function initialize() {
   app.start();
@@ -24,43 +48,39 @@ export function initialize() {
 }
 
 function createElements() {
-  // starLayers = Array(3).fill(createStarLayer());
-  wireframes = Array(5).fill(0).map(createWireframe);
+  // starLayers = Array(3)
+  //   .fill(0)
+  //   .map(createStarLayer);
+  wireframes = Array(numOfWireframes)
+    .fill(0)
+    .map(createWireframe);
 }
 
-// function createStarLayer() {
-//   const layer = new PIXI.ParticleContainer();
-//   const stars = 90;
-//   // star size for render texture
-//   const size = 32;
+function createStarLayer() {
+  const layer = new PIXI.ParticleContainer();
+  const numOfStars = 150;
+  const starSizeRange = [1, 2];
 
-//   // base multiplier for calc layer size
-//   const layerMultiplier = 2;
+  const starLayerWidth = app.renderer.width * starLayerSizeMultiplier;
+  const starLayerHeight = app.renderer.height * starLayerSizeMultiplier;
 
-//   const star = new PIXI.Graphics();
-//   star.beginFill(0xffffff);
-//   star.drawCircle(size, size, size);
-//   star.endFill();
+  for (let i = 0; i < numOfStars; i++) {
+    const p = new PIXI.Sprite(starTexture);
 
-//   const texture = renderer.generateTexture(star);
-//   starLayerWidth = renderer.width * layerMultiplier;
-//   starLayerHeight = renderer.height * layerMultiplier;
+    p.x = Math.random() * starLayerWidth;
+    p.y = Math.random() * starLayerHeight;
+    p.scale.x = p.scale.y =
+      (starSizeRange[0]
+        + Math.random() * (starSizeRange[1] - starSizeRange[0]))
+      / starTextureSize;
 
-//   // create starfield
-//   for (let i = 0; i < stars; i++) {
-//     const p = new PIXI.Sprite(texture);
+    layer.addChild(p);
+  }
 
-//     p.x = Math.random() * starLayerWidth;
-//     p.y = Math.random() * starLayerHeight;
-//     p.scale.x = p.scale.y = ((0.7 * 1) / (size / 2)) + ((Math.random() * 0.6 * 1) / (size / 2));
+  app.stage.addChild(layer);
 
-//     layer.addChild(p);
-//   }
-
-//   stage.addChild(layer);
-
-//   return layer;
-// }
+  return layer;
+}
 
 function createWireframe() {
   const rect = new PIXI.Graphics();
@@ -69,8 +89,8 @@ function createWireframe() {
   rect.drawRect(
     0,
     0,
-    app.renderer.width - wireFrameMargin * 2,
-    app.renderer.height - wireFrameMargin * 2
+    app.renderer.width - wireframeMargin * 2,
+    app.renderer.height - wireframeMargin * 2
   );
 
   app.stage.addChild(rect);
@@ -84,11 +104,18 @@ function colorToHex(color: string) {
 
 function ticker(delta: number) {
   const wireframePos = getWireframePos();
+  const relPos = getRelativePos();
 
   if (wireframePos !== lastWireframePos) {
     updateWireframes(wireframePos);
 
     lastWireframePos = wireframePos;
+  }
+
+  if (relPos !== lastRelPos) {
+    updateStarLayers(relPos);
+
+    lastRelPos = relPos;
   }
 }
 
@@ -100,27 +127,70 @@ function getScaleByZPos(zPos: number, perspective: number) {
   return perspective / (perspective - zPos);
 }
 
-function getPosInAxis(scale: number, originalMeasure: number, margin: number = 0) {
-  return (((scale - 1) * originalMeasure) - (margin * 2 * scale)) / -2;
+function getPosInAxis(
+  scale: number,
+  originalMeasure: number,
+  margin: number = 0
+) {
+  return ((scale - 1) * originalMeasure - margin * 2 * scale) / -2;
 }
 
 function updateWireframes(scrollPos: number) {
-  const zPosOutRange: [number, number] = [100, -160];
-  const layersZGap = wireframeCycleLength / wireframes.length;
+  const zOutStart = 100;
+  const zPosRange: [number, number] = [
+    zOutStart,
+    zOutStart - wireframesZGap * wireframes.length,
+  ];
+  const layersScrollGap = wireframeCycleLength / wireframes.length;
+  const offset =
+    (zPosRange[0] / (zPosRange[0] - zPosRange[1])) * wireframeCycleLength;
 
   for (let i = 0; i < wireframes.length; i++) {
     const wireframe = wireframes[i];
-    const baseValue = zPosOutRange[0] / (zPosOutRange[0] - zPosOutRange[1]) * wireframeCycleLength;
-    const pos = scrollPos + baseValue + layersZGap * i;
+    const pos = scrollPos + offset + layersScrollGap * i;
 
-    const zPos = cyclicLerp(pos, [0, wireframeCycleLength], zPosOutRange);
-    const scale = getScaleByZPos(zPos, elementsPerspective + 500);
+    const zPos = cyclicLerp(pos, [0, wireframeCycleLength], zPosRange);
+    const scale = getScaleByZPos(zPos, wireframePerspective);
 
-    wireframe.width = app.renderer.width - wireFrameMargin * 2;
-    wireframe.height = app.renderer.height - wireFrameMargin * 2;
-    wireframe.x = getPosInAxis(scale, app.renderer.width, wireFrameMargin);
-    wireframe.y = getPosInAxis(scale, app.renderer.height, wireFrameMargin);
+    __watchValue(i, scale);
+
+    wireframe.width = app.renderer.width - wireframeMargin * 2;
+    wireframe.height = app.renderer.height - wireframeMargin * 2;
+    wireframe.x = getPosInAxis(scale, app.renderer.width, wireframeMargin);
+    wireframe.y = getPosInAxis(scale, app.renderer.height, wireframeMargin);
     wireframe.scale.x = wireframe.scale.y = scale;
-    wireframe.alpha = lerp(zPos, [0, zPosOutRange[1]], [0.5, 0], true);
+    wireframe.alpha = interpolate(zPos, [0, zPosRange[1]], [0.8, 0], false);
+  }
+}
+
+function updateStarLayers(relPos: number) {
+  const zPosRange: [number, number] = [599, -800];
+  const layersZGap = 0.1;
+
+  for (let i = 0; i < starLayers.length; i++) {
+    const starLayer = starLayers[i];
+    const pos = (relPos + layersZGap * i) % 1;
+
+    const zPos = interpolate(
+      pos,
+      [0, 0.4, 1],
+      [zPosRange[0], -200, zPosRange[1]]
+    );
+    const scale = getScaleByZPos(zPos, elementsPerspective);
+
+    __watchValue(i, zPos);
+
+    starLayer.x = getPosInAxis(
+      scale,
+      app.renderer.width,
+      -app.renderer.width / 2
+    );
+    starLayer.y = getPosInAxis(
+      scale,
+      app.renderer.height,
+      -app.renderer.height / 2
+    );
+    starLayer.scale.x = starLayer.scale.y = scale;
+    starLayer.alpha = interpolate(zPos, [0, zPosRange[1]], [0.6, 0], false);
   }
 }

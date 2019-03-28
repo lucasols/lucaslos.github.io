@@ -61,7 +61,8 @@ const GlobalStyle = () => {
   const [getDebugLayout, setDebugLayout] = useGetSet(false);
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    // OPTIMIZE: refactor this
+    if (__DEV__) {
       hotkey('shift+d', () => {
         setDebugLayout(!getDebugLayout());
       });

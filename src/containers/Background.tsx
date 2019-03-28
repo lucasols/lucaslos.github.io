@@ -16,7 +16,7 @@ const Background = () => {
     if (container.current) container.current.appendChild(app.view);
     initialize();
 
-    return () => app.stop();
+    return () => app.destroy();
   }, []);
 
   return <Container ref={container} />;

@@ -9,6 +9,7 @@ import React from 'react';
 import { animated } from 'react-spring';
 import { scrollHeight, useSpaceScroll } from 'utils/spaceScroll';
 import * as spaceScroll from 'config/spaceScroll'; // REVIEW: all * as imports
+import { __watchValue } from 'utils/debugUtils';
 
 const ScrollHandler = styled.div`
   position: absolute;
@@ -45,27 +46,18 @@ const App = () => {
     inTransition,
   };
 
+  if (__DEV__) {
+    __watchValue('Pos', () => relativePos.getValue());
+    __watchValue('TransitionPos', () => transitionPos.getValue());
+    __watchValue('ScrollPos', () => scrollPos.getValue());
+    __watchValue('Active', activeSection);
+  }
+
   return (
     <>
       <ScrollHandler />
       <MainContent>
         <Background />
-        {__DEV__ && <div
-          css={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            color: '#fff',
-          }}
-        >
-          Pos: <animated.span>{relativePos}</animated.span>
-          <br />
-          TransitionPos: <animated.span>{transitionPos}</animated.span>
-          <br />
-          Active: <span>{activeSection}</span>
-          <br />
-          ScrollPos: <animated.span>{scrollPos}</animated.span>
-        </div>}
         <Contact springProps={springProps} active={activeSection === 'contact'} />
         <Projects springProps={springProps} active={activeSection === 'projects'} />
         <AboutMe springProps={springProps} active={activeSection === 'aboutMe'} />
