@@ -4,8 +4,9 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { directories } = require('./package.json');
 
-const folder = './docs';
+const folder = `./${directories.build}`;
 
 module.exports = {
   mode: 'production',
