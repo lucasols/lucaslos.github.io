@@ -10,7 +10,7 @@ import {
 import { letterSpacing } from 'style/helpers';
 import Button from 'components/Button';
 import { centerContent } from 'style/modifiers';
-import galleryModalState, { openProject } from 'state/galleryState';
+import galleryModalState from 'state/galleryState';
 import { mqMobile } from 'style/mediaQueries';
 
 type Props = {
@@ -45,7 +45,7 @@ const Container = styled.article`
 
 const Info = styled.div`
   ${centerContent};
-  padding: 28px 24px;
+  padding: 28px 24px 28px 32px;
   background: #f8f8f8;
 
   h1 {

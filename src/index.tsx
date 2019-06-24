@@ -11,18 +11,26 @@ if (__PROD__) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('sw.js')
-        .then((registration) => {
+        .then(registration => {
           console.log('SW registered: ', registration);
         })
-        .catch((registrationError) => {
+        .catch(registrationError => {
           console.log('SW registration failed: ', registrationError);
         });
     });
   }
 
+  // @ts-ignore
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  // eslint-disable-next-line no-inner-declarations
+  function gtag() { // TODO: check this
+    // @ts-ignore
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
+  }
+  // @ts-ignore
   gtag('js', new Date());
+  // @ts-ignore
   gtag('config', 'UA-112807554-1');
 }
 
