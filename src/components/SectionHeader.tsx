@@ -16,13 +16,16 @@ const Container = styled.h1`
   font-size: 24px;
   font-weight: 400;
   color: ${colorPrimary};
-  ${letterSpacing(16)};
 
   border-top: 1px solid ${colorTertiary};
   padding-top: 16px;
   margin-bottom: 40px;
+
+  span {
+    ${letterSpacing(16)};
+  }
 `;
 
-const SectionHeader = ({ name }: Props) => <Container>{name}</Container>;
+const SectionHeader = ({ name }: Props) => <Container><span>{name}</span></Container>;
 
 export default SectionHeader;
