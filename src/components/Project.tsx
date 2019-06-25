@@ -21,7 +21,7 @@ type Props = {
   client: string;
   date: string;
   description: string;
-  links: {
+  links?: {
     url: string;
     label: string;
   }[];
@@ -66,7 +66,7 @@ const Info = styled.div`
 
   p {
     line-height: 1.4;
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 28px;
   }
 `;
@@ -94,8 +94,10 @@ const Project = ({
 }: Props) => (
   <Container id={id}>
     <SlideShow
-      imgs={imgs}
-      onClick={() => galleryModalState.dispatch('openProject', { project: pos })}
+      imgs={imgs.slice(0, 3)}
+      onClick={() =>
+        galleryModalState.dispatch('openProject', { project: pos })
+      }
     />
     <Info>
       <div>
@@ -105,9 +107,16 @@ const Project = ({
           {date} <span css={{ color: colorTertiary }}>·</span> {client}
         </h2>
         <p>{description}</p>
-        {links.map((elem, i) => (
-          <Button bgColor="#f8f8f8" key={i} label={elem.label} href={elem.url} />
-        ))}
+        {links &&
+          links.map((elem, i) => (
+            <Button
+              css={{ marginBottom: 8, marginRight: 8, width: '100%' }}
+              bgColor="#f8f8f8"
+              key={i}
+              label={elem.label}
+              href={elem.url}
+            />
+          ))}
       </div>
     </Info>
   </Container>
