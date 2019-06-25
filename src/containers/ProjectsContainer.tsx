@@ -13,7 +13,7 @@ const Container = styled.section`
 
 const Projects = () => (
   <>
-    <SectionHeader name="Projetos" />
+    <SectionHeader name="Principais Projetos" />
     <Container id="projetos">
       {projects.map((project, i) => (
         <Project pos={i} key={i} {...project} />
