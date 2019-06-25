@@ -6,7 +6,7 @@
     "dev": "node scripts/dev-server.js",
     "serve": "start http://localhost:5050 && node scripts/prod-server.js",
     "build": "npm run validate-typescript && webpack --progress",
-    "build-with-stats": "webpack --progress --profile --json > stats.json",
+    "build-with-stats": "npm run validate-typescript && webpack --progress --profile --json > stats.json",
     "validate-typescript": "tsc -p tsconfig.prod.json"
   },
   "author": "Lucas Santos",
