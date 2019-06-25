@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 app.get(`/${name.replace(' ', '_')}/*`, (req, res) => {
   const file = req.params[0] ? req.params[0] : 'index.html';
   console.log(`serve file: ${file}`);
-  res.sendfile(file, { root: `./docs/` });
+  res.sendfile(file, { root: `./${directories.build}` });
 });
 
 
