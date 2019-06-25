@@ -102,16 +102,16 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        `**/main*.js`,
-        `**/*style*.css`,
-        `**/*runtime*.js`,
-        `**/*vendors*.js`,
-        `**/npm*.js`,
-        `**/precache-manifest*.js`,
-      ],
-    }),
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns: [
+    //     `**/main*.js`,
+    //     `**/*style*.css`,
+    //     `**/*runtime*.js`,
+    //     `**/*vendors*.js`,
+    //     `**/npm*.js`,
+    //     `**/precache-manifest*.js`,
+    //   ],
+    // }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
