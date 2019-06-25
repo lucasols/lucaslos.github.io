@@ -6,6 +6,8 @@ import { fillContainer, hide, centerContent } from 'style/modifiers';
 import { colorGradient, colorPrimary, easeInOut } from 'style/theme';
 import css from '@emotion/css';
 import { Global } from '@emotion/core';
+import { letterSpacing } from 'style/helpers';
+import { mqMobile } from 'style/mediaQueries';
 
 type Props = {
   images: string[];
@@ -27,6 +29,7 @@ const Container = styled.div`
   height: 100%;
   visibility: visible;
   transition: 160ms;
+  user-select: none;
 
   overflow: hidden;
 
@@ -54,6 +57,13 @@ const ImgContainer = styled.div`
   right: 42px;
   bottom: 24px;
   left: 42px;
+
+  ${mqMobile} {
+    top: 32px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
 `;
 
 const Button = styled.button`
@@ -63,6 +73,10 @@ const Button = styled.button`
   opacity: 0.7;
   cursor: pointer;
   visibility: visible;
+
+  ${mqMobile} {
+    opacity: 0.4;
+  }
 
   &:hover {
     opacity: 1;
@@ -93,8 +107,9 @@ const ArrowWrapper = styled.div`
 const Title = styled.h1`
   position: absolute;
   top: 8px;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 300;
+  ${letterSpacing(4)};
 
   color: #fff;
 `;
@@ -124,7 +139,7 @@ const Gallery = ({
         `
       }
     />
-    {title && <Title>{title}</Title>}
+    {title && <Title>{title} - {activePos + 1}/{images.length} </Title>}
     <ImgContainer key={`img-${projectId}`}>
       {images.map((img, i) =>
         (activePos - i === 1 || activePos - i === -1 || activePos - i === 0 ? (
@@ -151,6 +166,10 @@ const Gallery = ({
         css={css`
           left: 24px;
 
+          ${mqMobile} {
+            left: 4px;
+          }
+
           ${Button}:hover & {
             transform: translate3d(4px, 0, 0);
           }
@@ -173,6 +192,10 @@ const Gallery = ({
       <ArrowWrapper
         css={css`
           right: 24px;
+
+          ${mqMobile} {
+            right: 4px;
+          }
 
           ${Button}:hover & {
             transform: translate3d(4px, 0, 0);
