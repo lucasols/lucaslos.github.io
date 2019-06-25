@@ -43,13 +43,13 @@ const About = () => (
   <Container id="sobre">
     <h1>Olá! Sou Lucas Santos</h1>
     <p>
-      Um UX/UI Designer e Desenvolvedor Front-End comprometido em resolver
+      Um Designer de Produtos e Desenvolvedor Front-End comprometido em resolver
       problemas de forma criativa, criando produtos e experiências digitais
       intuitivas, inovadoras e fascinantes para tornar a vida das pessoas mais
       fácil.
     </p>
     <p>
-      Trabalho criando soluções de mobilidade no{' '}
+      Trabalho criando soluções de mobilidade para os veículos da BMW no{' '}
       <InlineLink href="https://www.youtube.com/watch?v=amyePR7zFOI">
         Projeto Mobilty da BMW/Poli-USP
       </InlineLink>{' '}
