@@ -63,7 +63,7 @@ const About = () => (
       Mais detalhes sobre mim você encontra nos links da seção{' '}
       <InlineLink href="#contato" noNewTab>contato</InlineLink> ou meu{' '}
       <InlineLink href="https://www.linkedin.com/in/lucasols/">
-        LinkedIn
+        LinkedIn.
       </InlineLink>
     </p>
   </Container>
