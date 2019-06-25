@@ -48,10 +48,10 @@ const Contact = () => (
       />
 
       <div css={{ marginRight: -16 }}>
-        <Button css={circularButton} icon="linkedIn" iconSize={iconSize} href="" />
-        <Button css={circularButton} icon="medium" iconSize={iconSize} href="" />
-        <Button css={circularButton} icon="behance" iconSize={iconSize} href="" />
-        <Button css={circularButton} icon="github" iconSize={iconSize} href="" />
+        <Button css={circularButton} icon="linkedIn" iconSize={iconSize} href="https://www.linkedin.com/in/lucasols/" />
+        <Button css={circularButton} icon="medium" iconSize={iconSize} href="https://medium.com/@lucasols" />
+        <Button css={circularButton} icon="behance" iconSize={iconSize} href="https://www.behance.net/lucasols" />
+        <Button css={circularButton} icon="github" iconSize={iconSize} href="https://github.com/lucaslos" />
       </div>
       <RepositoryLink href="https://github.com/lucaslos/lucaslos.github.io" target="_blank">
         Confira o código desse site no github
