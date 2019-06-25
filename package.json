@@ -11,16 +11,16 @@
   },
   "author": "Lucas Santos",
   "directories": {
-    "build": "docs",
-    "static": "docs/static"
+    "build": "",
+    "static": "static"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
     "express": "~4.17.1",
-    "webpack": "^4.34.0",
-    "webpack-cli": "^3.3.4"
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -82,7 +82,7 @@
     "ts-node": "^8.3.0",
     "typescript": "^3.5.2",
     "typescript-eslint-parser": "^22.0.0",
-    "webpack-dev-server": "^3.7.1",
+    "webpack-dev-server": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
     "workbox-webpack-plugin": "^4.3.1"
   }
