@@ -1,5 +1,5 @@
 const UXUI_DESIGN = 'UX/UI Design';
-const FRONT_END = 'Front-END';
+const FRONT_END = 'Front-End';
 
 const projects = [
   {
